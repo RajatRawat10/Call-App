@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call Web App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="form-container" id="newCallForm">
+  <h2>New Call</h2>
+  <form>
+    <label for="image">Image URL</label>
+    <input type="url" id="image" placeholder="https://example.com/photo.jpg" />
+
+    <label for="fullname">Full Name</label>
+    <input type="text" id="fullname" placeholder="Enter full name" />
+
+    <label for="hometown">Home Town</label>
+    <input type="text" id="hometown" placeholder="Enter home town" />
+
+    <label for="purpose">Purpose</label>
+    <input type="text" id="purpose" placeholder="e.g., Quick appointment note" />
+
+    <label>Category</label>
+    <div class="categories">
+      <label><input type="radio" name="category" /> Emergency</label>
+      <label><input type="radio" name="category" /> Important</label>
+      <label><input type="radio" name="category" /> Urgent</label>
+      <label><input type="radio" name="category" /> No Rush</label>
+    </div>
+
+    <button type="submit">Create Note</button>
+  </form>
+</div>
+
+
+ <div class="container">
+    <!-- Left controls -->
+    <div class="controls">
+      <button>+</button>
+      <button>↑</button>
+      <button>↓</button>
+    </div>
+
+    <!-- Card stack -->
+    <div class="card-stack">
+      <div class="card">
+        <div class="profile">
+          <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="profile">
+        </div>
+        <h3>Aarohi Sharma</h3>
+        <p><b>Hometown:</b> Mumbai</p>
+        <p><b>Purpose:</b> Doctor Appointment</p>
+        <div class="actions">
+          <button class="call-btn">Call</button>
+          <button class="msg-btn">Message</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="profile">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="profile">
+        </div>
+        <h3>Rohan Verma</h3>
+        <p><b>Hometown:</b> Delhi</p>
+        <p><b>Purpose:</b> Business Meeting</p>
+        <div class="actions">
+          <button class="call-btn">Call</button>
+          <button class="msg-btn">Message</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="profile">
+          <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="profile">
+        </div>
+        <h3>Kavya Nair</h3>
+        <p><b>Hometown:</b> Bengaluru</p>
+        <p><b>Purpose:</b> Job Interview</p>
+        <div class="actions">
+          <button class="call-btn">Call</button>
+          <button class="msg-btn">Message</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Priority colors -->
+    <div class="priority">
+      <span class="black"></span>
+      <span class="purple"></span>
+      <span class="orange"></span>
+      <span class="teal"></span>
+    </div>
+  </div>
+
+</body>
+</html>
