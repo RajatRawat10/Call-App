@@ -3,6 +3,9 @@ let addnote = document.querySelector("#add-note");
 let formContainer = document.querySelector(".form-container");
 let closeBtn = document.querySelector(".close-btn");
 
+const cardStack = document.querySelector(".card-stack");
+const upArrowBtn = document.querySelector("#up-arrow");
+const downArrowBtn = document.querySelector("#down-arrow");
 
 // Select form and inputs
 const form = document.querySelector("form");
@@ -14,7 +17,7 @@ const purposeInput = document.querySelector("#purpose");
 const categoryInputs = document.querySelectorAll("input[name='category']");
 // Select buttons
 const createBtn = document.querySelector(".create-btn");
-// const closeBtn = document.querySelector(".close-btn");
+
 
 // Example: get selected category
 function getSelectedCategory() {
@@ -27,16 +30,16 @@ function getSelectedCategory() {
     return selected;
 }
 
-function saveToLocalstorage(note) {              //this function will receive the object 
+function saveToLocalstorage(obj) {              //this function will receive the object 
     if (localStorage.getItem("tasks") === null) {     //this will  run when the task is null
         let oldTasks = [];
-        oldTasks.push(note);
+        oldTasks.push(obj);
         localStorage.setItem("tasks", JSON.stringify(oldTasks));
     }
     else {
         let oldTasks = localStorage.getItem("tasks");        //this will  run when old tasks were already there 
         oldTasks = JSON.parse(oldTasks);                    //old tasks to  array add new task and again setit into stringify
-        oldTasks.push(note);
+        oldTasks.push(obj);
         localStorage.setItem("tasks", JSON.stringify(oldTasks));
     }
 }
@@ -46,13 +49,13 @@ function saveToLocalstorage(note) {              //this function will receive th
 addnote.addEventListener("click", function () {
     formContainer.style.display = "initial"
 })
-
+//for  close form 
 closeBtn.addEventListener("click", function () {
     formContainer.style.display = "none"
 })
 
 
-//for validation
+//form validation
 function validateForm() {
     let isValid = true;
 
@@ -110,52 +113,52 @@ form.addEventListener("submit", function (e) {
             purpose: purposeInput.value.trim(),
             category: getSelectedCategory()
         };
-
         saveToLocalstorage(note);  // save note into localStorage
         renderCards();             // re-render cards immediately
-        console.log("Note saved", note);
-
-        form.reset();
+        // console.log("Note saved", note);
+        form.reset();              // for reset form 
         formContainer.style.display = "none";
     }
 });
 
-
-// function to add cards from localStorage
+//render in the cards
 function renderCards() {
     const allCards = JSON.parse(localStorage.getItem("tasks")) || [];
-    const cardStack = document.querySelector(".card-stack"); // container in HTML
-   // cardStack.innerHTML = ""; // clear old cards before re-rendering
+    // console.log(allCards)
+    cardStack.innerHTML = ""; // clear old cards before re-rendering
 
-    allCards.forEach(function (task) {
-        // Main card container
+    allCards.forEach(function (task) {              //html createElement markup
+        // main card
         const card = document.createElement("div");
         card.classList.add("card");
 
-        // Profile div
-        const profileDiv = document.createElement("div");
-        profileDiv.classList.add("profile");
+        // profile div
+        const profile = document.createElement("div");
+        profile.classList.add("profile");
 
         const img = document.createElement("img");
-        img.src = task.image || ""; // fallback image
+        img.src = task.image;
         img.alt = "profile";
-        profileDiv.appendChild(img);
+        profile.appendChild(img);
 
-        // Name
+        // name
         const name = document.createElement("h3");
         name.textContent = task.fullname;
 
-        // Hometown
-        const hometown = document.createElement("p");
-        hometown.innerHTML = `<b>Hometown:</b> ${task.hometown}`;
+        // hometown   
+        const hometowninfo = document.createElement("p");
+        const label = document.createElement("b");
+        label.textContent = "Hometown:";
+        const value = document.createTextNode(` ${task.hometown}`);
+        hometowninfo.append(label, value);
 
-        // Purpose
-        const purpose = document.createElement("p");
-        purpose.innerHTML = `<b>Purpose:</b> ${task.purpose}`;
+        // purpose
+        const purposeinfo = document.createElement("p");
+        purposeinfo.innerHTML = `<b>Purpose:</b> ${task.purpose}`;
 
-        // Actions div
-        const actionsDiv = document.createElement("div");
-        actionsDiv.classList.add("actions");
+        // actions
+        const actions = document.createElement("div");
+        actions.classList.add("actions");
 
         const callBtn = document.createElement("button");
         callBtn.classList.add("call-btn");
@@ -165,18 +168,46 @@ function renderCards() {
         msgBtn.classList.add("msg-btn");
         msgBtn.textContent = "Message";
 
-        actionsDiv.appendChild(callBtn);
-        actionsDiv.appendChild(msgBtn);
+        actions.appendChild(callBtn);
+        actions.appendChild(msgBtn);
 
-        // Append all to card
-        card.appendChild(profileDiv);
+        // assemble card
+        card.appendChild(profile);
         card.appendChild(name);
-        card.appendChild(hometown);
-        card.appendChild(purpose);
-        card.appendChild(actionsDiv);
+        card.appendChild(hometowninfo);
+        card.appendChild(purposeinfo);
+        card.appendChild(actions);
 
-        // finally append card to container
         cardStack.appendChild(card);
     });
 }
-renderCards()
+// renderCards();
+window.addEventListener("DOMContentLoaded", renderCards);
+
+
+//update the cardstack with arrow buttons
+function updateCardStack() {
+    const cards = document.querySelectorAll(".card")
+    cards.forEach(function (card, index) {
+        card.style.zIndex = 3 - index;
+        card.style.transform = `translateY(${index * 10}px scale(${1 - index * 0.02}))`;
+        card.style.opacity = `${1 - index * 0.01}`;
+
+    });
+}
+upArrowBtn.addEventListener("click", function () {
+    let lastchild = cardStack.lastElementChild;
+    if (lastchild) {
+        cardStack.insertBefore(lastchild, cardStack.firstElementChild);
+        updateCardStack();    //for update the card stack
+    }
+
+})
+downArrowBtn.addEventListener("click", function () {
+    let firstchild = cardStack.firstElementChild;
+    if (firstchild) {
+        cardStack.append(firstchild);
+        updateCardStack();    //for update the card stack
+    }
+})
+
